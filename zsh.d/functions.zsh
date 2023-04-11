@@ -15,7 +15,7 @@ function gitd {
 }
 
 function proxify {
-  
+
   PROXY_CONFIG="./proxychains.conf"
   if [[ ! -f $PROXY_CONFIG ]]; then
     echo "[-] Couldn't find \"proxychains.conf\" file."
@@ -24,4 +24,11 @@ function proxify {
   fi
 
   proxychains -f "$PROXY_CONFIG" "$@"
+}
+
+function cheat {
+  pushd
+  cd ~/notes
+  cat * | bat --file-name notes.md
+  popd
 }
