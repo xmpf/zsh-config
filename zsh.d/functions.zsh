@@ -32,3 +32,7 @@ function cheat {
   cat * | bat --file-name notes.md
   popd
 }
+
+function typora {
+  /usr/bin/typora "$@" >&/dev/null &
+}
