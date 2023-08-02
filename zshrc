@@ -7,7 +7,7 @@ ZSH_THEME="robbyrussell"
 
 # --- PLUGINS
 
-plugins=(git aws)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -31,10 +31,11 @@ done
 RUBY_BIN="$HOME/.local/share/gem/ruby/3.0.0/bin"
 LOCAL_BIN="${HOME}/.local/bin"
 CARGO_BIN="${HOME}/.cargo/bin"
+CODEQL_BIN="${HOME}/tools/codeql/codeql"
 
 export GOBIN="${HOME}/go/bin"
 
-export PATH="${PATH}:${RUBY_BIN}:${LOCAL_BIN}:${CARGO_BIN}:${GOBIN}"
+export PATH="${PATH}:${RUBY_BIN}:${LOCAL_BIN}:${CARGO_BIN}:${GOBIN}:${CODEQL_BIN}"
 
 autoload bashcompinit && bashcompinit
 autoload -Uz compinit && compinit 
@@ -43,3 +44,7 @@ autoload -Uz compinit && compinit
 if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
         source /etc/profile.d/vte.sh
 fi
+
+export PYENV_ROOT="${HOME}/.pyenv"
+command -v pyenv >/dev/null || export PATH="${PATH}:${PYENV_ROOT}/bin"
+eval "$(pyenv init -)" 

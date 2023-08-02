@@ -34,5 +34,5 @@ function cheat {
 }
 
 function typora {
-  /usr/bin/typora "$@" >&/dev/null &
+  setsid /usr/bin/typora "$@" >&/dev/null &
 }
