@@ -36,3 +36,18 @@ function cheat {
 function typora {
   setsid /usr/bin/typora "$@" >&/dev/null &
 }
+
+function mullvad_off {
+  interface=$(ip a | grep -- '-wg-' | awk -F":" '/:/{print $2}' | tr -d ' ')
+  echo "[+] Bringing ${interface} down..."
+  sudo wg-quick down "${interface}"
+}
+
+function mullvad_on {
+  connection=${wireguard_connections[$RANDOM % 394]}
+  if [[ ! -z $1 ]]; then
+    connection="$1"
+  fi
+  echo "[+] Connecting to ${connection}..."
+  sudo wg-quick up "${connection}"
+}
