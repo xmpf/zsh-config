@@ -1,0 +1,3 @@
+setopt hist_ignore_all_dups
+setopt SHARE_HISTORY
+setopt hist_ignore_space 
