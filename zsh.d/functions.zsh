@@ -51,3 +51,30 @@ function mullvad_on {
   echo "[+] Connecting to ${connection}..."
   sudo wg-quick up "${connection}"
 }
+
+function install_burp {
+  BURPSUITEPRO="${HOME}/BurpSuitePro"
+
+  if [ -d "${BURPSUITEPRO}" ]; then
+
+    current_burp_version=$(realpath "${BURPSUITEPRO}/burpsuite_pro.jar" | grep -Po '(?<=/burpsuite_pro_v)[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+')
+    latest_burp_version=$(curl -s https://portswigger.net/burp/releases | grep -Po '(?<=/burp/releases/professional-community-)[0-9]+\-[0-9]+\-[0-9]+\-[0-9]+' | head -n 1 | tr '-' '.' )
+
+    echo "[*] Current version: ${current_burp_version}"
+    echo "[*] Latest version: ${latest_burp_version}"
+
+    if [[ $current_burp_version != $latest_burp_version ]]; then
+        echo "Updating Burp Pro from $current_burp_version to $latest_burp_version"
+        wget -q --show-progress --directory-prefix="${BURPSUITEPRO}" \
+          -O "burpsuite_pro_v${latest_burp_version}.jar" \
+          "https://portswigger-cdn.net/burp/releases/download?product=pro&version=&type=jar"
+        echo "Removing old Burp Pro version"
+        rm -f "${BURPSUITEPRO}/burpsuite_pro_v$current_burp_version.jar"
+        echo "Symlinking new Burp Pro version"
+        ln -f -s "${BURPSUITEPRO}/burpsuite_pro_v$latest_burp_version.jar" "${BURPSUITEPRO}/burpsuite_pro.jar"
+    else
+        echo "Burp Pro is already up to (date current version: $current_burp_version == latest version: $latest_burp_version)"
+    fi
+
+  fi
+}
