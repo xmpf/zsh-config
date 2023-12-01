@@ -78,3 +78,22 @@ function install_burp {
 
   fi
 }
+
+function python-env {
+  TARGET_VENV=$(eval echo "${HOME}/.local/share/virtualenvs/python-env*")
+  
+  if [ -d ${TARGET_VENV} ]; then
+    echo "[*] Using ${TARGET_VENV} as a virtualenv"
+    . "${TARGET_VENV}/bin/activate"
+  fi
+
+}
+
+function dotenv {
+  if [ -f ~/.env ]; then
+    set -o allexport
+    source ~/.env
+    set +o allexport
+  fi
+}
+
