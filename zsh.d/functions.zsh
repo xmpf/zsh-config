@@ -97,3 +97,11 @@ function dotenv {
   fi
 }
 
+function chezmoi_update {
+  cat <<EOF | chezmoi cd
+git status -vvv | less
+git add . -vA
+git commit -p -m "$(date -I)"
+EOF
+}
+
