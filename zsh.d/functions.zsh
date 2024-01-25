@@ -79,16 +79,6 @@ function install_burp {
   fi
 }
 
-function python-env {
-  TARGET_VENV=$(eval echo "${HOME}/.local/share/virtualenvs/python-env*")
-  
-  if [ -d ${TARGET_VENV} ]; then
-    echo "[*] Using ${TARGET_VENV} as a virtualenv"
-    . "${TARGET_VENV}/bin/activate"
-  fi
-
-}
-
 function dotenv {
   if [ -f ~/.env ]; then
     set -o allexport
@@ -97,11 +87,41 @@ function dotenv {
   fi
 }
 
+function get_current_branch {
+  git describe --contains --all HEAD
+}
+
 function chezmoi_update {
-  cat <<EOF | chezmoi cd
+  cat <<"EOF" | chezmoi cd
+# --- HEREDOC ---
+
 git status -vvv | less
-git add . -vA
-git commit -p -m "$(date -I)"
+
+echo -n "[?] git add . -A (y/n): "
+while read -k 1 -t 0; do read -r discard; done
+read -q continue
+echo ""
+if [[ "$continue" =~ ^([yY])$ ]]; then
+  git add . -vA
+fi
+
+echo -n "[?] git commit -m \"$(date -I)\" (y/n): " 
+while read -k 1 -t 0; do read -r discard; done
+read -q continue
+echo ""
+if [[ "$continue" =~ ^([yY])$ ]]; then
+  git commit -p -m "$(date -I)"
+fi
+
+echo -n "[?] git push -u origin master (y/n): " 
+while read -k 1 -t 0; do read -r discard; done
+read -q continue
+echo ""
+if [[ "$continue" =~ ^([yY])$ ]]; then
+  git push -u origin master
+fi
+
+# --- HEREDOC ---
 EOF
 }
 
